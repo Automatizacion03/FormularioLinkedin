@@ -278,15 +278,11 @@
                     <select id="carrera" name="carrera" required>
                         <option value="">Selecciona una carrera</option>
                         <option value="Psicología">Psicología</option>
-                        <option value="Administración">Administración de Empresas</option>
-                        <option value="Ingeniería">Ingeniería</option>
-                        <option value="Medicina">Medicina</option>
-                        <option value="Derecho">Derecho</option>
-                        <option value="Arquitectura">Arquitectura</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Diseño">Diseño Gráfico</option>
-                        <option value="Contabilidad">Contabilidad</option>
+                        <option value="Neurociencias">Neurociencias</option>
                         <option value="Educación">Educación</option>
+                        <option value="Fonoaudiología">Fonoaudiología</option>
+                        <option value="Derecho">Derecho</option>
+                        <option value="Administración">Administración de Empresas</option>
                     </select>
                 </div>
                 
@@ -296,18 +292,43 @@
                 </div>
                 
                 <div class="form-group campos-dinamicos">
-                    <label for="ubicacion">Ubicación <span class="required">*</span></label>
-                    <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej: Buenos Aires" required>
+                    <label for="pais">País <span class="required">*</span></label>
+                    <select id="pais" name="pais" required>
+                        <option value="Mexico">México</option>
+                        <option value="otro">Otro país...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group campos-dinamicos hidden" id="ciudadMexicoDiv">
+                    <label for="ciudadMexico">Ciudad de México</label>
+                    <select id="ciudadMexico" name="ciudadMexico">
+                        <option value="Mexico">Todo México</option>
+                        <option value="Ciudad de México, Mexico">Ciudad de México</option>
+                        <option value="Guadalajara, Jalisco, Mexico">Guadalajara</option>
+                        <option value="Monterrey, Nuevo León, Mexico">Monterrey</option>
+                        <option value="Puebla, Mexico">Puebla</option>
+                        <option value="Tijuana, Baja California, Mexico">Tijuana</option>
+                        <option value="León, Guanajuato, Mexico">León</option>
+                        <option value="Culiacán, Sinaloa, Mexico">Culiacán</option>
+                        <option value="Mérida, Yucatán, Mexico">Mérida</option>
+                        <option value="Querétaro, Mexico">Querétaro</option>
+                        <option value="Cancún, Quintana Roo, Mexico">Cancún</option>
+                    </select>
+                </div>
+                
+                <div class="form-group campos-dinamicos hidden" id="otroPaisDiv">
+                    <label for="otroPais">Especifica la ubicación</label>
+                    <input type="text" id="otroPais" name="otroPais" placeholder="Ej: Madrid, Spain o São Paulo, Brazil">
                 </div>
                 
                 <div class="form-group campos-dinamicos">
                     <label for="numeroResultados">Número de Resultados</label>
-                    <input type="number" id="numeroResultados" name="numeroResultados" min="5" max="50" value="20">
+                    <input type="number" id="numeroResultados" name="numeroResultados" min="10" max="50" value="25">
                 </div>
                 
                 <div class="form-group campos-dinamicos">
                     <label for="email">Tu Email <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" placeholder="tu@universidad.edu" required>
+                    <input type="email" id="email" name="email" placeholder="tu@universidadisep.com" required>
                 </div>
             `,
             
@@ -318,33 +339,52 @@
                 
                 <div class="form-group campos-dinamicos">
                     <label for="especialidad">Especialidad Profesional <span class="required">*</span></label>
-                    <input type="text" id="especialidad" name="especialidad" placeholder="Ej: Data Science" required>
+                    <input type="text" id="especialidad" name="especialidad" placeholder="Ej: Neuropsicólogo, Terapeuta" required>
                 </div>
                 
                 <div class="form-group campos-dinamicos">
                     <label for="nivelExperiencia">Nivel de Experiencia</label>
                     <select id="nivelExperiencia" name="nivelExperiencia">
                         <option value="">Cualquier nivel</option>
-                        <option value="Junior">Junior (1-3 años)</option>
-                        <option value="Semi-Senior">Semi-Senior (3-5 años)</option>
-                        <option value="Senior">Senior (5+ años)</option>
-                        <option value="Expert">Expert/Director (10+ años)</option>
+                        <option value="1-5 years">1-5 años</option>
+                        <option value="5-10 years">5-10 años</option>
+                        <option value="10+ years">10+ años</option>
                     </select>
                 </div>
                 
                 <div class="form-group campos-dinamicos">
-                    <label for="ubicacion">Ubicación <span class="required">*</span></label>
-                    <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej: Buenos Aires" required>
+                    <label for="pais">País <span class="required">*</span></label>
+                    <select id="pais" name="pais" required>
+                        <option value="Mexico">México</option>
+                        <option value="otro">Otro país...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group campos-dinamicos hidden" id="ciudadMexicoDiv">
+                    <label for="ciudadMexico">Ciudad de México</label>
+                    <select id="ciudadMexico" name="ciudadMexico">
+                        <option value="Mexico">Todo México</option>
+                        <option value="Ciudad de México, Mexico">Ciudad de México</option>
+                        <option value="Guadalajara, Jalisco, Mexico">Guadalajara</option>
+                        <option value="Monterrey, Nuevo León, Mexico">Monterrey</option>
+                        <option value="Culiacán, Sinaloa, Mexico">Culiacán</option>
+                        <option value="Tijuana, Baja California, Mexico">Tijuana</option>
+                    </select>
+                </div>
+                
+                <div class="form-group campos-dinamicos hidden" id="otroPaisDiv">
+                    <label for="otroPais">Especifica la ubicación</label>
+                    <input type="text" id="otroPais" name="otroPais" placeholder="Ej: Barcelona, Spain">
                 </div>
                 
                 <div class="form-group campos-dinamicos">
                     <label for="numeroResultados">Número de Resultados</label>
-                    <input type="number" id="numeroResultados" name="numeroResultados" min="5" max="50" value="20">
+                    <input type="number" id="numeroResultados" name="numeroResultados" min="10" max="50" value="25">
                 </div>
                 
                 <div class="form-group campos-dinamicos">
                     <label for="email">Tu Email <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" placeholder="tu@universidad.edu" required>
+                    <input type="email" id="email" name="email" placeholder="tu@universidadisep.com" required>
                 </div>
             `,
             
@@ -357,32 +397,51 @@
                     <label for="industria">Industria/Sector <span class="required">*</span></label>
                     <select id="industria" name="industria" required>
                         <option value="">Selecciona una industria</option>
-                        <option value="Tecnología">Tecnología e IT</option>
-                        <option value="Salud">Salud y Medicina</option>
-                        <option value="Finanzas">Finanzas y Banca</option>
-                        <option value="Educación">Educación</option>
-                        <option value="Marketing">Marketing y Publicidad</option>
+                        <option value="Mental Health Care">Salud Mental</option>
+                        <option value="Education Management">Educación</option>
+                        <option value="Hospital & Health Care">Salud</option>
+                        <option value="Law Practice">Legal</option>
+                        <option value="Business Consulting">Consultoría</option>
                     </select>
                 </div>
                 
                 <div class="form-group campos-dinamicos">
                     <label for="rolBuscado">Rol/Puesto Específico <span class="required">*</span></label>
-                    <input type="text" id="rolBuscado" name="rolBuscado" placeholder="Ej: Director de Marketing" required>
+                    <input type="text" id="rolBuscado" name="rolBuscado" placeholder="Ej: Director, Coordinador" required>
                 </div>
                 
                 <div class="form-group campos-dinamicos">
-                    <label for="ubicacion">Ubicación <span class="required">*</span></label>
-                    <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej: Buenos Aires" required>
+                    <label for="pais">País <span class="required">*</span></label>
+                    <select id="pais" name="pais" required>
+                        <option value="Mexico">México</option>
+                        <option value="otro">Otro país...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group campos-dinamicos hidden" id="ciudadMexicoDiv">
+                    <label for="ciudadMexico">Ciudad de México</label>
+                    <select id="ciudadMexico" name="ciudadMexico">
+                        <option value="Mexico">Todo México</option>
+                        <option value="Ciudad de México, Mexico">Ciudad de México</option>
+                        <option value="Guadalajara, Jalisco, Mexico">Guadalajara</option>
+                        <option value="Monterrey, Nuevo León, Mexico">Monterrey</option>
+                        <option value="Culiacán, Sinaloa, Mexico">Culiacán</option>
+                    </select>
+                </div>
+                
+                <div class="form-group campos-dinamicos hidden" id="otroPaisDiv">
+                    <label for="otroPais">Especifica la ubicación</label>
+                    <input type="text" id="otroPais" name="otroPais" placeholder="Ej: Miami, USA">
                 </div>
                 
                 <div class="form-group campos-dinamicos">
                     <label for="numeroResultados">Número de Resultados</label>
-                    <input type="number" id="numeroResultados" name="numeroResultados" min="5" max="50" value="20">
+                    <input type="number" id="numeroResultados" name="numeroResultados" min="10" max="50" value="25">
                 </div>
                 
                 <div class="form-group campos-dinamicos">
                     <label for="email">Tu Email <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" placeholder="tu@universidad.edu" required>
+                    <input type="email" id="email" name="email" placeholder="tu@universidadisep.com" required>
                 </div>
             `
         };
@@ -473,6 +532,26 @@
                     
                     if (tipo && templatesParticular[tipo]) {
                         camposTipoDiv.innerHTML = templatesParticular[tipo];
+                        
+                        // Agregar listener para el selector de país
+                        const paisSelect = document.getElementById('pais');
+                        const ciudadMexicoDiv = document.getElementById('ciudadMexicoDiv');
+                        const otroPaisDiv = document.getElementById('otroPaisDiv');
+                        
+                        if (paisSelect && ciudadMexicoDiv && otroPaisDiv) {
+                            // Mostrar ciudades de México por defecto
+                            ciudadMexicoDiv.classList.remove('hidden');
+                            
+                            paisSelect.addEventListener('change', function() {
+                                if (this.value === 'Mexico') {
+                                    ciudadMexicoDiv.classList.remove('hidden');
+                                    otroPaisDiv.classList.add('hidden');
+                                } else {
+                                    ciudadMexicoDiv.classList.add('hidden');
+                                    otroPaisDiv.classList.remove('hidden');
+                                }
+                            });
+                        }
                     } else {
                         camposTipoDiv.innerHTML = '';
                     }
@@ -506,6 +585,16 @@
                 tipoBusqueda: tipoBusqueda
             };
             
+            // Manejar ubicación según país
+            let ubicacion;
+            const pais = formData.get('pais');
+            
+            if (pais === 'Mexico') {
+                ubicacion = formData.get('ciudadMexico') || 'Mexico';
+            } else {
+                ubicacion = formData.get('otroPais') || 'International';
+            }
+            
             if (tipoBusqueda === 'carrera') {
                 data.titulo = formData.get('materia') || formData.get('carrera');
                 data.carrera = formData.get('carrera');
@@ -520,8 +609,8 @@
                 data.rolBuscado = formData.get('rolBuscado');
             }
             
-            data.ubicacion = formData.get('ubicacion');
-            data.numeroResultados = parseInt(formData.get('numeroResultados')) || 20;
+            data.ubicacion = ubicacion;
+            data.numeroResultados = parseInt(formData.get('numeroResultados')) || 25;
             data.email_solicitante = formData.get('email');
             
             return data;
