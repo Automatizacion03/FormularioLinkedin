@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda de Profesionales</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .required {
+            color: #e74c3c;
+            margin-left: 4px;
+        }
+        
+        select, input, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: inherit;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .campos-dinamicos {
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box p {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #333;
+        }
+        
+        .info-box.campaign {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .badge.particular {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .badge.campana {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Búsqueda de Profesionales</h1>
+        <p class="subtitle">Encuentra el profesor ideal para tu universidad</p>
+        
+        <div id="alert" class="alert"></div>
+        
+        <form id="busquedaForm">
+            <div class="form-group">
+                <label for="modoBusqueda">
+                    Modo de Búsqueda
+                    <span class="required">*</span>
+                </label>
+                <select id="modoBusqueda" name="modoBusqueda" required>
+                    <option value="">Selecciona el modo</option>
+                    <option value="particular">🎯 Búsqueda Particular</option>
+                    <option value="campana">📢 Campaña de Marketing</option>
+                </select>
+                <p class="help-text">Particular: búsqueda específica | Campaña: búsqueda masiva para múltiples roles</p>
+            </div>
+            
+            <div id="camposModo" class="hidden"></div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 15px; color: #666;">Procesando búsqueda...</p>
+            </div>
+            
+            <button type="submit" id="submitBtn">
+                🔍 Buscar Profesionales
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // ===== CONFIGURACIÓN =====
+        const WEBHOOK_URL = 'https://tu-instancia-n8n.com/webhook/buscar-profesionales';
+        
+        // ===== ELEMENTOS DEL DOM =====
+        const modoBusquedaSelect = document.getElementById('modoBusqueda');
+        const camposModoDiv = document.getElementById('camposModo');
+        const form = document.getElementById('busquedaForm');
+        const alertDiv = document.getElementById('alert');
+        const loadingDiv = document.getElementById('loading');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        let tipoBusquedaSelect;
+        
+        // ===== TEMPLATES MODO PARTICULAR =====
+        const templatesParticular = {
+            carrera: `
+                <div class="info-box">
+                    <p><strong>Modo:</strong> <span class="badge particular">BÚSQUEDA PARTICULAR</span></p>
+                    <p>Búsqueda específica para encontrar un profesor</p>
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="carrera">Carrera Universitaria <span class="required">*</span></label>
+                    <select id="carrera" name="carrera" required>
+                        <option value="">Selecciona una carrera</option>
+                        <option value="Psicología">Psicología</option>
+                        <option value="Administración">Administración de Empresas</option>
+                        <option value="Ingeniería">Ingeniería</option>
+                        <option value="Medicina">Medicina</option>
+                        <option value="Derecho">Derecho</option>
+                        <option value="Arquitectura">Arquitectura</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Diseño">Diseño Gráfico</option>
+                        <option value="Contabilidad">Contabilidad</option>
+                        <option value="Educación">Educación</option>
+                    </select>
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="materia">Materia Específica (Opcional)</label>
+                    <input type="text" id="materia" name="materia" placeholder="Ej: Psicología Clínica">
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="ubicacion">Ubicación <span class="required">*</span></label>
+                    <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej: Buenos Aires" required>
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="numeroResultados">Número de Resultados</label>
+                    <input type="number" id="numeroResultados" name="numeroResultados" min="5" max="50" value="20">
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="email">Tu Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="tu@universidad.edu" required>
+                </div>
+            `,
+            
+            especialidad: `
+                <div class="info-box">
+                    <p><strong>Modo:</strong> <span class="badge particular">BÚSQUEDA PARTICULAR</span></p>
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="especialidad">Especialidad Profesional <span class="required">*</span></label>
+                    <input type="text" id="especialidad" name="especialidad" placeholder="Ej: Data Science" required>
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="nivelExperiencia">Nivel de Experiencia</label>
+                    <select id="nivelExperiencia" name="nivelExperiencia">
+                        <option value="">Cualquier nivel</option>
+                        <option value="Junior">Junior (1-3 años)</option>
+                        <option value="Semi-Senior">Semi-Senior (3-5 años)</option>
+                        <option value="Senior">Senior (5+ años)</option>
+                        <option value="Expert">Expert/Director (10+ años)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="ubicacion">Ubicación <span class="required">*</span></label>
+                    <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej: Buenos Aires" required>
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="numeroResultados">Número de Resultados</label>
+                    <input type="number" id="numeroResultados" name="numeroResultados" min="5" max="50" value="20">
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="email">Tu Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="tu@universidad.edu" required>
+                </div>
+            `,
+            
+            industria: `
+                <div class="info-box">
+                    <p><strong>Modo:</strong> <span class="badge particular">BÚSQUEDA PARTICULAR</span></p>
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="industria">Industria/Sector <span class="required">*</span></label>
+                    <select id="industria" name="industria" required>
+                        <option value="">Selecciona una industria</option>
+                        <option value="Tecnología">Tecnología e IT</option>
+                        <option value="Salud">Salud y Medicina</option>
+                        <option value="Finanzas">Finanzas y Banca</option>
+                        <option value="Educación">Educación</option>
+                        <option value="Marketing">Marketing y Publicidad</option>
+                    </select>
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="rolBuscado">Rol/Puesto Específico <span class="required">*</span></label>
+                    <input type="text" id="rolBuscado" name="rolBuscado" placeholder="Ej: Director de Marketing" required>
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="ubicacion">Ubicación <span class="required">*</span></label>
+                    <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej: Buenos Aires" required>
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="numeroResultados">Número de Resultados</label>
+                    <input type="number" id="numeroResultados" name="numeroResultados" min="5" max="50" value="20">
+                </div>
+                
+                <div class="form-group campos-dinamicos">
+                    <label for="email">Tu Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="tu@universidad.edu" required>
+                </div>
+            `
+        };
+        
+        // ===== TEMPLATE MODO CAMPAÑA =====
+        const templatesCampana = `
+            <div class="info-box campaign">
+                <p><strong>Modo:</strong> <span class="badge campana">CAMPAÑA DE MARKETING</span></p>
+                <p>Búsqueda masiva para campañas de reclutamiento</p>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="nombreCampana">Nombre de la Campaña <span class="required">*</span></label>
+                <input type="text" id="nombreCampana" name="nombreCampana" placeholder="Ej: Reclutamiento 2025 Q1" required>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="objetivoCampana">Objetivo <span class="required">*</span></label>
+                <select id="objetivoCampana" name="objetivoCampana" required>
+                    <option value="">Selecciona el objetivo</option>
+                    <option value="reclutamiento-masivo">Reclutamiento Masivo</option>
+                    <option value="expansion-carreras">Expansión de Carreras</option>
+                    <option value="profesores-invitados">Profesores Invitados</option>
+                </select>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="perfilesObjetivo">Perfiles Objetivo (separados por coma) <span class="required">*</span></label>
+                <textarea id="perfilesObjetivo" name="perfilesObjetivo" placeholder="Ej: Ingenieros, Diseñadores, Data Scientists" required></textarea>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="ubicacionesCampana">Ubicaciones (separadas por coma) <span class="required">*</span></label>
+                <input type="text" id="ubicacionesCampana" name="ubicacionesCampana" placeholder="Ej: Buenos Aires, Córdoba" required>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="tamañoCampana">Tamaño de la Campaña <span class="required">*</span></label>
+                <select id="tamañoCampana" name="tamañoCampana" required>
+                    <option value="">Selecciona el tamaño</option>
+                    <option value="pequena">Pequeña (50-100)</option>
+                    <option value="mediana">Mediana (100-250)</option>
+                    <option value="grande">Grande (250-500)</option>
+                    <option value="masiva">Masiva (500+)</option>
+                </select>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="emailResponsable">Email del Responsable <span class="required">*</span></label>
+                <input type="email" id="emailResponsable" name="emailResponsable" placeholder="responsable@universidad.edu" required>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="notificaciones">Frecuencia de Reportes</label>
+                <select id="notificaciones" name="notificaciones">
+                    <option value="diario">Diario</option>
+                    <option value="semanal" selected>Semanal</option>
+                    <option value="mensual">Mensual</option>
+                </select>
+            </div>
+        `;
+        
+        // ===== EVENTOS =====
+        modoBusquedaSelect.addEventListener('change', function() {
+            const modo = this.value;
+            console.log('Modo seleccionado:', modo);
+            
+            if (modo === 'particular') {
+                camposModoDiv.innerHTML = `
+                    <div class="form-group campos-dinamicos">
+                        <label for="tipoBusqueda">Tipo de Búsqueda <span class="required">*</span></label>
+                        <select id="tipoBusqueda" name="tipoBusqueda" required>
+                            <option value="">Selecciona una opción</option>
+                            <option value="carrera">Por Carrera Universitaria</option>
+                            <option value="especialidad">Por Especialidad Específica</option>
+                            <option value="industria">Por Industria/Sector</option>
+                        </select>
+                    </div>
+                    <div id="camposTipoBusqueda"></div>
+                `;
+                camposModoDiv.classList.remove('hidden');
+                
+                tipoBusquedaSelect = document.getElementById('tipoBusqueda');
+                tipoBusquedaSelect.addEventListener('change', function() {
+                    const tipo = this.value;
+                    console.log('Tipo seleccionado:', tipo);
+                    const camposTipoDiv = document.getElementById('camposTipoBusqueda');
+                    
+                    if (tipo && templatesParticular[tipo]) {
+                        camposTipoDiv.innerHTML = templatesParticular[tipo];
+                    } else {
+                        camposTipoDiv.innerHTML = '';
+                    }
+                });
+                
+            } else if (modo === 'campana') {
+                camposModoDiv.innerHTML = templatesCampana;
+                camposModoDiv.classList.remove('hidden');
+            } else {
+                camposModoDiv.innerHTML = '';
+                camposModoDiv.classList.add('hidden');
+            }
+        });
+        
+        // ===== FUNCIONES AUXILIARES =====
+        function showAlert(message, type) {
+            alertDiv.textContent = message;
+            alertDiv.className = `alert ${type}`;
+            alertDiv.style.display = 'block';
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        function procesarDatosParticular(formData) {
+            const tipoBusqueda = formData.get('tipoBusqueda');
+            const data = {
+                modo: 'particular',
+                origen: 'manual',
+                fuente: 'linkedin',
+                tipoBusqueda: tipoBusqueda
+            };
+            
+            if (tipoBusqueda === 'carrera') {
+                data.titulo = formData.get('materia') || formData.get('carrera');
+                data.carrera = formData.get('carrera');
+                data.materia = formData.get('materia');
+            } else if (tipoBusqueda === 'especialidad') {
+                data.titulo = formData.get('especialidad');
+                data.especialidad = formData.get('especialidad');
+                data.nivelExperiencia = formData.get('nivelExperiencia');
+            } else if (tipoBusqueda === 'industria') {
+                data.titulo = formData.get('rolBuscado');
+                data.industria = formData.get('industria');
+                data.rolBuscado = formData.get('rolBuscado');
+            }
+            
+            data.ubicacion = formData.get('ubicacion');
+            data.numeroResultados = parseInt(formData.get('numeroResultados')) || 20;
+            data.email_solicitante = formData.get('email');
+            
+            return data;
+        }
+        
+        function procesarDatosCampana(formData) {
+            const perfiles = formData.get('perfilesObjetivo').split(',').map(p => p.trim()).filter(p => p);
+            const ubicaciones = formData.get('ubicacionesCampana').split(',').map(u => u.trim()).filter(u => u);
+            
+            const tamañoMap = {
+                'pequena': 100,
+                'mediana': 250,
+                'grande': 500,
+                'masiva': 1000
+            };
+            
+            const tamano = formData.get('tamañoCampana');
+            const numeroResultados = tamañoMap[tamano] || 250;
+            
+            return {
+                modo: 'campana',
+                origen: 'manual',
+                fuente: 'linkedin',
+                nombreCampana: formData.get('nombreCampana'),
+                objetivoCampana: formData.get('objetivoCampana'),
+                perfilesObjetivo: perfiles,
+                ubicaciones: ubicaciones,
+                tamañoCampana: tamano,
+                numeroResultados: numeroResultados,
+                email_solicitante: formData.get('emailResponsable'),
+                notificaciones: formData.get('notificaciones'),
+                titulo: perfiles.join(' OR '),
+                ubicacion: ubicaciones[0] || 'Argentina'
+            };
+        }
+        
+        // ===== SUBMIT FORM =====
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            loadingDiv.style.display = 'block';
+            
+            const formData = new FormData(form);
+            const modoBusqueda = formData.get('modoBusqueda');
+            
+            let data;
+            
+            if (modoBusqueda === 'particular') {
+                data = procesarDatosParticular(formData);
+            } else if (modoBusqueda === 'campana') {
+                data = procesarDatosCampana(formData);
+            } else {
+                showAlert('❌ Selecciona un modo de búsqueda válido.', 'error');
+                submitBtn.disabled = false;
+                loadingDiv.style.display = 'none';
+                return;
+            }
+            
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    const mensaje = modoBusqueda === 'campana' 
+                        ? '✅ Campaña iniciada exitosamente. Recibirás reportes periódicos.'
+                        : '✅ Búsqueda iniciada. Recibirás los resultados por email.';
+                    
+                    showAlert(mensaje, 'success');
+                    form.reset();
+                    camposModoDiv.innerHTML = '';
+                    camposModoDiv.classList.add('hidden');
+                } else {
+                    throw new Error('Error en la respuesta');
+                }
+            } catch (error) {
+                showAlert('❌ Error al procesar la búsqueda. Intenta nuevamente.', 'error');
+                console.error('Error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                loadingDiv.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
