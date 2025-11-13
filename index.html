@@ -288,25 +288,6 @@
                 </div>
                 
                 <div class="form-group campos-dinamicos">
-                    <label for="industries">Filtrar por Industria</label>
-                    <select id="industries" name="industries" multiple size="5">
-                        <option value="43" selected>Educación Superior</option>
-                        <option value="44" selected>Educación Primaria/Secundaria</option>
-                        <option value="139">Salud Mental</option>
-                        <option value="14">Hospitales y Salud</option>
-                        <option value="10">Servicios Médicos</option>
-                        <option value="12">Biotecnología</option>
-                        <option value="148">Investigación</option>
-                        <option value="15">Marketing y Publicidad</option>
-                        <option value="6">Servicios Legales</option>
-                        <option value="111">E-Learning</option>
-                        <option value="4">Desarrollo de Software</option>
-                        <option value="other">Todas las industrias</option>
-                    </select>
-                    <p class="help-text">Mantén Ctrl/Cmd presionado para seleccionar múltiples</p>
-                </div>
-                
-                <div class="form-group campos-dinamicos">
                     <label for="pais">País <span class="required">*</span></label>
                     <select id="pais" name="pais" required>
                         <option value="Mexico">México</option>
@@ -396,22 +377,6 @@
                 </div>
                 
                 <div class="form-group campos-dinamicos">
-                    <label for="industries">Industrias</label>
-                    <select id="industries" name="industries" multiple size="5">
-                        <option value="43">Educación Superior</option>
-                        <option value="139">Salud Mental</option>
-                        <option value="14">Hospitales y Salud</option>
-                        <option value="148">Investigación</option>
-                        <option value="4">Desarrollo de Software</option>
-                        <option value="15">Marketing y Publicidad</option>
-                        <option value="6">Servicios Legales</option>
-                        <option value="12">Biotecnología</option>
-                        <option value="other">Todas las industrias</option>
-                    </select>
-                    <p class="help-text">Mantén Ctrl/Cmd para seleccionar múltiples</p>
-                </div>
-                
-                <div class="form-group campos-dinamicos">
                     <label for="pais">País <span class="required">*</span></label>
                     <select id="pais" name="pais" required>
                         <option value="Mexico">México</option>
@@ -481,24 +446,6 @@
                     <label for="currentJobTitles">Títulos Exactos</label>
                     <input type="text" id="currentJobTitles" name="currentJobTitles" 
                            placeholder="Ej: Chief Technology Officer, VP of Engineering">
-                </div>
-                
-                <div class="form-group campos-dinamicos">
-                    <label for="industries">Industrias <span class="required">*</span></label>
-                    <select id="industries" name="industries" multiple size="6" required>
-                        <option value="43">Educación Superior</option>
-                        <option value="44">Educación Primaria/Secundaria</option>
-                        <option value="139">Salud Mental</option>
-                        <option value="14">Hospitales y Salud</option>
-                        <option value="4">Desarrollo de Software</option>
-                        <option value="5">Servicios de IT</option>
-                        <option value="15">Marketing y Publicidad</option>
-                        <option value="6">Servicios Legales</option>
-                        <option value="148">Investigación</option>
-                        <option value="12">Biotecnología</option>
-                        <option value="other">Todas las industrias</option>
-                    </select>
-                    <p class="help-text">Selecciona al menos una industria</p>
                 </div>
                 
                 <div class="form-group campos-dinamicos">
@@ -602,22 +549,6 @@
                 <input type="text" id="otraUbicacion" name="otraUbicacion" 
                        placeholder="Ej: Buenos Aires, Córdoba, Rosario, Mendoza">
                 <p class="help-text">⚠️ Usar nombres completos: "Argentina" no "AR"</p>
-            </div>
-            
-            <div class="form-group campos-dinamicos">
-                <label for="industries">Industrias Objetivo</label>
-                <select id="industries" name="industries" multiple size="6">
-                    <option value="43" selected>Educación Superior</option>
-                    <option value="44" selected>Educación Primaria/Secundaria</option>
-                    <option value="139">Salud Mental</option>
-                    <option value="14">Hospitales y Salud</option>
-                    <option value="148">Investigación</option>
-                    <option value="4">Desarrollo de Software</option>
-                    <option value="15">Marketing y Publicidad</option>
-                    <option value="6">Servicios Legales</option>
-                    <option value="other">Todas las industrias</option>
-                </select>
-                <p class="help-text">Mantén Ctrl/Cmd para seleccionar múltiples</p>
             </div>
             
             <div class="form-group campos-dinamicos">
@@ -778,12 +709,6 @@
             const currentJobTitles = currentJobTitlesRaw ? 
                 currentJobTitlesRaw.split(',').map(t => t.trim()).filter(t => t) : [];
             
-            // Procesar industries
-            const industriesSelect = document.getElementById('industries');
-            const selectedIndustries = Array.from(industriesSelect.selectedOptions)
-                .map(opt => opt.value)
-                .filter(v => v !== 'other');
-            
             // Procesar schools
             const schoolsRaw = formData.get('schools');
             const schools = schoolsRaw ? 
@@ -816,7 +741,6 @@
                 searchQuery: searchQuery,
                 currentJobTitles: currentJobTitles.length > 0 ? currentJobTitles : undefined,
                 locations: locations,
-                industries: selectedIndustries.length > 0 ? selectedIndustries.map(i => parseInt(i)) : undefined,
                 schools: schools.length > 0 ? schools : undefined,
                 currentCompanies: currentCompanies.length > 0 ? currentCompanies : undefined,
                 maxItems: parseInt(formData.get('maxItems')) || 20,
@@ -857,12 +781,6 @@
                 locations = otraUbicacion ? otraUbicacion.split(',').map(l => l.trim()).filter(l => l) : ['International'];
             }
             
-            // Procesar industries
-            const industriesSelect = document.getElementById('industries');
-            const selectedIndustries = Array.from(industriesSelect.selectedOptions)
-                .map(opt => opt.value)
-                .filter(v => v !== 'other');
-            
             // Procesar schools
             const schoolsRaw = formData.get('schools');
             const schools = schoolsRaw ? 
@@ -883,7 +801,6 @@
                 searchQuery: searchQuery,
                 currentJobTitles: currentJobTitles.length > 0 ? currentJobTitles : undefined,
                 locations: locations,
-                industries: selectedIndustries.length > 0 ? selectedIndustries.map(i => parseInt(i)) : undefined,
                 schools: schools.length > 0 ? schools : undefined,
                 currentCompanies: currentCompanies.length > 0 ? currentCompanies : undefined,
                 maxItems: parseInt(formData.get('maxItems')) || 500,
