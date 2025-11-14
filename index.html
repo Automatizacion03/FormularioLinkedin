@@ -687,6 +687,23 @@
         });
         
         // ===== FUNCIONES AUXILIARES =====
+
+        // Nueva función para manejar startPage
+        function getNextStartPage() {
+            // Obtener el valor actual de localStorage (o 1 si no existe)
+            let currentPage = parseInt(localStorage.getItem('startPage')) || 1;
+            
+            // Si llegó a 5, resetear a 1
+            if (currentPage >= 5) {
+                currentPage = 1;
+            }
+            
+            // Guardar el siguiente valor para la próxima vez
+            localStorage.setItem('startPage', currentPage + 1);
+            
+            return currentPage;
+        }
+        
         function showAlert(message, type) {
             alertDiv.textContent = message;
             alertDiv.className = `alert ${type}`;
@@ -745,7 +762,7 @@
                 currentCompanies: currentCompanies.length > 0 ? currentCompanies : undefined,
                 maxItems: parseInt(formData.get('maxItems')) || 20,
                 profileScraperMode: formData.get('profileScraperMode') || 'Full',
-                startPage: 1,
+                startPage: getNextStartPage(),
                 
                 // Metadata
                 email_solicitante: formData.get('email')
@@ -805,7 +822,7 @@
                 currentCompanies: currentCompanies.length > 0 ? currentCompanies : undefined,
                 maxItems: parseInt(formData.get('maxItems')) || 500,
                 profileScraperMode: formData.get('profileScraperMode') || 'Full',
-                startPage: 1,
+                startPage: getNextStartPage(),
                 
                 // Metadata de campaña
                 email_solicitante: formData.get('emailResponsable'),
