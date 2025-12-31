@@ -220,7 +220,7 @@
 <body>
     <div class="container">
         <h1>🎓 Búsqueda de Profesionales</h1>
-        <p class="subtitle">Encuentra el profesor ideal para tu universidad</p>
+        <p class="subtitle">Encuentra el profesional ideal para tu necesidad</p>
         
         <div id="alert" class="alert"></div>
         
@@ -232,10 +232,11 @@
                 </label>
                 <select id="modoBusqueda" name="modoBusqueda" required>
                     <option value="">Selecciona el modo</option>
-                    <option value="particular">🎯 Búsqueda Particular</option>
-                    <option value="campana">📢 Campaña de Marketing</option>
+                    <option value="particular">🎯 Búsqueda Particular (LinkedIn)</option>
+                    <option value="campana">📢 Campaña de Marketing (LinkedIn)</option>
+                    <option value="instagram">🏨 Hotel Calma Celestino (Instagram)</option>
                 </select>
-                <p class="help-text">Particular: búsqueda específica | Campaña: búsqueda masiva para múltiples roles</p>
+                <p class="help-text">Particular: búsqueda específica | Campaña: búsqueda masiva | Hotel Calma Celestino: búsqueda influencers</p>
             </div>
             
             <div id="camposModo" class="hidden"></div>
@@ -603,6 +604,72 @@
             </div>
         `;
         
+        // ===== TEMPLATE MODO INSTAGRAM (HOTEL) =====
+        const templateInstagram = `
+            <div class="info-box" style="background: #fce4ec; border-left: 4px solid #e91e63;">
+                <p><strong>Modo:</strong> <span class="badge" style="background: #fce4ec; color: #c2185b;">🏨 HOTEL CALMA CELESTINO</span></p>
+                <p>Búsqueda de influencers de Instagram para Hotel Calma Celestino usando Gleemo.ai</p>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="nombreCampana">Nombre de la Campaña <span class="required">*</span></label>
+                <input type="text" id="nombreCampana" name="nombreCampana" 
+                       placeholder="Ej: Campaña Verano 2025 - Hotel Riviera Maya" required>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="searchQuery">Términos de Búsqueda <span class="required">*</span></label>
+                <input type="text" id="searchQuery" name="searchQuery" 
+                       placeholder="Ej: hotel travel lifestyle luxury" required>
+                <p class="help-text">Palabras clave para buscar influencers en Gleemo</p>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="ubicacionInfluencer">Ubicación de Influencers <span class="required">*</span></label>
+                <input type="text" id="ubicacionInfluencer" name="ubicacionInfluencer" 
+                       placeholder="Ej: Mexico, Cancun, CDMX" value="Mexico" required>
+                <p class="help-text">Separar por comas si son varias ubicaciones</p>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="maxItems">Cantidad de Influencers</label>
+                <input type="number" id="maxItems" name="maxItems" 
+                       min="5" max="50" value="10">
+                <p class="help-text">Máximo 50 por búsqueda</p>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="objetivoCampana">Objetivo de la Campaña <span class="required">*</span></label>
+                <textarea id="objetivoCampana" name="objetivoCampana" 
+                          placeholder="Ej: Promover experiencias de hospedaje premium y generar reservas para temporada alta" required></textarea>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="beneficios">Beneficios a Ofrecer</label>
+                <textarea id="beneficios" name="beneficios" 
+                          placeholder="Ej: Estancia gratuita de 3 noches, Experiencia spa incluida, Tour exclusivo"></textarea>
+                <p class="help-text">Separar cada beneficio por coma o salto de línea</p>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="tonoCampana">Tono de la Campaña</label>
+                <select id="tonoCampana" name="tonoCampana">
+                    <option value="Aspiracional y cercano" selected>Aspiracional y cercano</option>
+                    <option value="Profesional y elegante">Profesional y elegante</option>
+                    <option value="Casual y divertido">Casual y divertido</option>
+                    <option value="Exclusivo y premium">Exclusivo y premium</option>
+                    <option value="Aventurero y emocionante">Aventurero y emocionante</option>
+                </select>
+            </div>
+            
+            <div class="form-group campos-dinamicos">
+                <label for="emailResponsable">Tu Email <span class="required">*</span></label>
+                <input type="email" id="emailResponsable" name="emailResponsable" 
+                       placeholder="marketing@hotel.com" required>
+                <p class="help-text">Recibirás el análisis y propuestas personalizadas</p>
+            </div>
+        `;
+        
         // ===== EVENTOS =====
         modoBusquedaSelect.addEventListener('change', function() {
             const modo = this.value;
@@ -678,6 +745,9 @@
                         }
                     });
                 }
+            } else if (modo === 'instagram') {
+                camposModoDiv.innerHTML = templateInstagram;
+                camposModoDiv.classList.remove('hidden');
             } else {
                 camposModoDiv.innerHTML = '';
                 camposModoDiv.classList.add('hidden');
@@ -828,6 +898,38 @@
             };
         }
         
+        function procesarDatosInstagram(formData) {
+            // Procesar ubicaciones
+            const ubicacionRaw = formData.get('ubicacionInfluencer');
+            const locations = ubicacionRaw ? 
+                ubicacionRaw.split(',').map(l => l.trim()).filter(l => l) : ['Mexico'];
+            
+            // Procesar beneficios
+            const beneficiosRaw = formData.get('beneficios');
+            const beneficios = beneficiosRaw ? 
+                beneficiosRaw.split(/[,\n]/).map(b => b.trim()).filter(b => b) : [];
+            
+            return {
+                modo: 'instagram',
+                origen: 'manual',
+                fuente: 'gleemo',
+                
+                // Parámetros para Gleemo
+                searchQuery: formData.get('searchQuery'),
+                locations: locations,
+                maxItems: parseInt(formData.get('maxItems')) || 10,
+                
+                // Datos de campaña para personalización
+                nombreCampana: formData.get('nombreCampana'),
+                objetivoCampana: formData.get('objetivoCampana'),
+                beneficios: beneficios,
+                tonoCampana: formData.get('tonoCampana'),
+                
+                // Metadata
+                email_solicitante: formData.get('emailResponsable')
+            };
+        }
+        
         // ===== SUBMIT FORM =====
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -844,6 +946,8 @@
                 data = procesarDatosParticular(formData);
             } else if (modoBusqueda === 'campana') {
                 data = procesarDatosCampana(formData);
+            } else if (modoBusqueda === 'instagram') {
+                data = procesarDatosInstagram(formData);
             } else {
                 showAlert('❌ Selecciona un modo de búsqueda válido.', 'error');
                 submitBtn.disabled = false;
@@ -861,9 +965,14 @@
                 });
                 
                 if (response.ok) {
-                    const mensaje = modoBusqueda === 'campana' 
-                        ? '✅ Campaña iniciada exitosamente. Recibirás reportes periódicos.'
-                        : '✅ Búsqueda iniciada. Recibirás los resultados por email.';
+                    let mensaje;
+                    if (modoBusqueda === 'campana') {
+                        mensaje = '✅ Campaña iniciada exitosamente. Recibirás reportes periódicos.';
+                    } else if (modoBusqueda === 'instagram') {
+                        mensaje = '✅ Búsqueda de influencers iniciada. Recibirás el análisis y propuestas por email.';
+                    } else {
+                        mensaje = '✅ Búsqueda iniciada. Recibirás los resultados por email.';
+                    }
                     
                     showAlert(mensaje, 'success');
                     form.reset();
