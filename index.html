@@ -608,13 +608,23 @@
         const templateInstagram = `
             <div class="info-box" style="background: #fce4ec; border-left: 4px solid #e91e63;">
                 <p><strong>Modo:</strong> <span class="badge" style="background: #fce4ec; color: #c2185b;">🏨 HOTEL CALMA CELESTINO</span></p>
-                <p>Búsqueda de influencers de Instagram para Hotel Calma Celestino usando Gleemo.ai</p>
+               <p>Búsqueda de influencers para Hotel Calma Celestino usando Gleemo.ai</p>
             </div>
             
             <div class="form-group campos-dinamicos">
                 <label for="nombreCampana">Nombre de la Campaña <span class="required">*</span></label>
                 <input type="text" id="nombreCampana" name="nombreCampana" 
                        placeholder="Ej: Campaña Verano 2026" required>
+            </div>
+
+            <div class="form-group campos-dinamicos">
+                <label for="platform">Plataforma <span class="required">*</span></label>
+                <select id="platform" name="platform" required>
+                    <option value="instagram" selected>📷 Instagram</option>
+                    <option value="tiktok">🎵 TikTok</option>
+                    <option value="youtube">📺 YouTube</option>
+                </select>
+                <p class="help-text">Red social donde buscar influencers</p>
             </div>
             
             <div class="form-group campos-dinamicos">
@@ -913,6 +923,9 @@
                 modo: 'instagram',
                 origen: 'manual',
                 fuente: 'gleemo',
+                
+                // Plataforma seleccionada (Instagram, TikTok, YouTube)
+                platform: formData.get('platform') || 'instagram',
                 
                 // Parámetros para Gleemo
                 searchQuery: formData.get('searchQuery'),
