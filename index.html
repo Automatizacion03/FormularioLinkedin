@@ -628,11 +628,35 @@
             </div>
             
             <div class="form-group campos-dinamicos">
-                <label for="searchQuery">Términos de Búsqueda <span class="required">*</span></label>
-                <input type="text" id="searchQuery" name="searchQuery" 
-                       placeholder="Ej: hotel travel lifestyle luxury" required>
-                <p class="help-text">Palabras clave para buscar influencers en Gleemo</p>
-            </div>
+    <label for="searchQuery">Categoría de Influencer <span class="required">*</span></label>
+    <select id="searchQuery" name="searchQuery" required>
+        <option value="">Selecciona una categoría</option>
+        <option value="Travel">🌴 Travel</option>
+        <option value="Foods & Beverages">🍽️ Foods & Beverages</option>
+        <option value="Beauty & Personal Care">💄 Beauty & Personal Care</option>
+        <option value="Clothing_ Shoes & Jewelry">👗 Clothing, Shoes & Jewelry</option>
+        <option value="Sports & Outdoors">⚽ Sports & Outdoors</option>
+        <option value="Medical_Care & Health">🏥 Medical Care & Health</option>
+        <option value="Business & Careers">💼 Business & Careers</option>
+        <option value="Friends, Family & Relationships">👨‍👩‍👧 Friends, Family & Relationships</option>
+        <option value="Television & Film">🎬 Television & Film</option>
+        <option value="Gaming">🎮 Gaming</option>
+        <option value="Arts & Crafts">🎨 Arts & Crafts</option>
+        <option value="Pets">🐾 Pets</option>
+        <option value="Maternity and baby products">👶 Maternity and Baby Products</option>
+        <option value="Household Goods & Home Appliances">🏠 Household Goods & Home Appliances</option>
+        <option value="Patio_ Lawn & Garden">🌱 Patio, Lawn & Garden</option>
+        <option value="3c & Mobile & Electronics">📱 3C & Mobile & Electronics</option>
+        <option value="Automotive">🚗 Automotive</option>
+        <option value="Books">📚 Books</option>
+        <option value="Apps">📲 Apps</option>
+        <option value="Office Products">🖥️ Office Products</option>
+        <option value="Toys">🧸 Toys</option>
+        <option value="Wedding">💒 Wedding</option>
+        <option value="Tobacco">🚬 Tobacco</option>
+    </select>
+    <p class="help-text">Categorías disponibles en Gleemo.ai</p>
+</div>
             
             <div class="form-group campos-dinamicos">
                 <label for="ubicacionInfluencer">Ubicación de Influencers <span class="required">*</span></label>
@@ -642,11 +666,11 @@
             </div>
             
             <div class="form-group campos-dinamicos">
-                <label for="maxItems">Cantidad de Influencers</label>
-                <input type="number" id="maxItems" name="maxItems" 
-                       min="5" max="50" value="10">
-                <p class="help-text">Máximo 50 por búsqueda</p>
-            </div>
+    <label for="maxItems">Cantidad de Influencers</label>
+    <input type="number" id="maxItems" name="maxItems" 
+           min="1" value="10">
+    <p class="help-text">Cantidad de influencers a extraer</p>
+</div>
             
             <div class="form-group campos-dinamicos">
                 <label for="objetivoCampana">Objetivo de la Campaña <span class="required">*</span></label>
